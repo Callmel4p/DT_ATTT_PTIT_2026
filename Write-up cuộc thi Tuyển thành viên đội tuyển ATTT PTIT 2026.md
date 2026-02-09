@@ -340,7 +340,7 @@ Nhưng kết quả thì không như mong đợi. Với 2 dữ liệu trên ta c�
 Từ cả mô tả bài và cụm từ `4ntj_d3buG`, mình đi tới khả năng là `key` hoặc `checker` ở phân tích tĩnh sẽ khác khi chương trình chạy thực tế ( tức là khi chương trình chạy thì sẽ có bước `modify` các giá trị này ).
 
 Tiến hành debug để kiểm tra, đặt bp ở trước khi hàm `check` được gọi trong main. Kết quả là chúng ta bị dừng debug trước cả khi tới được bp vì hàm `debugcheck()`
-![debugbreak](/img/debugreak.jpg)
+![debugbreak](/img/debugbreak.jpg)
 
 ==> Chương trình có 1 hàm tự động set bp và stop khi phát hiện bị debug.
 Thử bypass bp này chúng ta tới được bước nhập input và dừng ở hàm check đúng như mong muốn, kiểm tra key và checker. Ta thấy checker không thay đổi nhưng trong key đã có sự khác biệt so với phân tích tĩnh
