@@ -1,8 +1,3 @@
----
-title: Write-up cuộc thi Tuyển thành viên đội tuyển ATTT PTIT 2026
-
----
-
 # Write-up cuộc thi Tuyển thành viên đội tuyển ATTT PTIT 2026
 _Tác giả: Bùi Quốc Lập (il4pp)_
 
@@ -11,7 +6,7 @@ Nhờ mong muốn vào đội tuyển, mình đã cố hết sức để làm b�
 Chúc đội tuyển ngày một thành công!
 _happy hacking :>>_
 ## Challenge: Checker
-![Đề bài checker](https://hackmd.io/_uploads/HJzn1kvwWx.png)
+![Đề bài checker](/img/checker_desc.png)
 
 Bài này cho chúng ta 1 python script
 ```
@@ -94,7 +89,7 @@ Từ những dữ kiện đã có:
 Chúng ta có thể sử dụng công cụ `hashcat` để tìm ra được password:<br>
 
 - Dạng mã hóa (pbkdf2_hmac_sha256) --> mode 10900, hash.txt có dạng `sha256:iters:password(base64):salt(base64)`.
-![image](https://hackmd.io/_uploads/BkxL4ywDZe.png)
+![sample_hash_file](/img/hashcat_sample.png)
 - Sử dụng file `hash.txt` == `sha256:1:HPOA0qbQ8/auLPdvuuLw1w==:pbw+BrQn2otvuFe7r+Zzk8EEbJ4/WJwAXKmgAI2QwbA=`.
 - Dạng tấn công (brute-force + mask attack): `-a 3` + `mask == InfosecPTIT{_flag_}`
 - Do không biết `flag` có độ dài bao nhiêu, chúng ta sẽ thử lần lượt khoảng 1 -> 10. Nếu không tìm được thì tăng thêm nhưng không nhiều khả năng vì brute-force > 10 ký tự tốn rất nhiều thời gian --> không phù hợp.
@@ -129,12 +124,12 @@ for LEN in range(1,10):
 Đây là 1 script python ngắn giúp tự động hóa việc chạy câu lệnh `hashcat -m 10900 -a 3 hash.txt "InfosecPTIT{?a?a?a}" --potfile-path result.pot` để brute-force flag với số lượng ký tự brute-force ( số lượng ?a tăng dần từ 1 -> 10). Lưu kết quả (nếu tìm được) vào `result.pot` và sau đó mở file `result.pot` để check. Nếu file `result.pot` trống thì bỏ qua, thử tiếp. Nếu có kết quả tìm được lưu vào thì in ra kết quả, dừng chương trình.
 
 Đây là phần kết quả được tìm thấy sau khi chạy chương trình
-![image](https://hackmd.io/_uploads/Bk7oI1wwbg.png)
+![flag of checker](/img/flag_checker.jpg)
 
 _Flag: InfosecPTIT{gggg}_
 
 ## Challenge: Mini-VM
-![image](https://hackmd.io/_uploads/BJKDUewPZg.png)
+![descript of mini_VM](/img/mini_vm_des.png)
 
 Thật sự, em/mình không có gì nhiều để viết write-up về bài này, phần lớn công đều nhờ Chat-GPT.
 
@@ -252,11 +247,11 @@ Phần còn lại là giải ra flag, GPT đã solve và `Flag: InfosecPTIT{y0u_
 
 
 ## Challenge: Ọp ọp
-![image](https://hackmd.io/_uploads/BJJr9gww-l.png)
+![op_op_descript](/img/op_op_des.png)
 
 >_Bài này mình chưa solve được nhưng mình thấy nó hay hơn Mini-VM :>_
 
-Mở trực tiếp file được cho bằng IDA nhận được thông báo về có thể 1 phần trong file khác thường so với 1 file thực thi thông thường. Mở bằng DiE thì thấy đây đúng là file bị `pack` bằng UPX.![image](https://hackmd.io/_uploads/rkCMjgwPWl.png)
+Mở trực tiếp file được cho bằng IDA nhận được thông báo về có thể 1 phần trong file khác thường so với 1 file thực thi thông thường. Mở bằng DiE thì thấy đây đúng là file bị `pack` bằng UPX.![die_re4](/img/die_re4.png)
 
 UPX là 1 công cụ chuyên `Pack` file thực thi và chúng ta có thể dễ dàng unpack với câu lệnh `upx -d <file_name>.exe -o <output_file_name>.exe`
 
@@ -345,7 +340,7 @@ Nhưng kết quả thì không như mong đợi. Với 2 dữ liệu trên ta c�
 Từ cả mô tả bài và cụm từ `4ntj_d3buG`, mình đi tới khả năng là `key` hoặc `checker` ở phân tích tĩnh sẽ khác khi chương trình chạy thực tế ( tức là khi chương trình chạy thì sẽ có bước `modify` các giá trị này ).
 
 Tiến hành debug để kiểm tra, đặt bp ở trước khi hàm `check` được gọi trong main. Kết quả là chúng ta bị dừng debug trước cả khi tới được bp vì hàm `debugcheck()`
-![image](https://hackmd.io/_uploads/BJzbeWwvbx.png)
+![debugbreak](/img/debugreak.jpg)
 
 ==> Chương trình có 1 hàm tự động set bp và stop khi phát hiện bị debug.
 Thử bypass bp này chúng ta tới được bước nhập input và dừng ở hàm check đúng như mong muốn, kiểm tra key và checker. Ta thấy checker không thay đổi nhưng trong key đã có sự khác biệt so với phân tích tĩnh
